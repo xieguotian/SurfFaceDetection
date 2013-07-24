@@ -1,0 +1,29 @@
+//extrac surf feature
+//?class or function
+//function
+class FeatureExtract
+{
+}
+
+//load model and detect
+class SurfModel
+{
+JudegeWindow(sum,scale);
+loadModel(filename);
+
+Seq<weak> weaks
+}
+
+
+//Detection
+class SurfFaceDetection
+{
+MultiDetection;
+SingleScaleDetection;
+FeatureExtract;
+SurfModel;
+
+scale;
+step;
+
+}
