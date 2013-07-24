@@ -1,8 +1,10 @@
 //extrac surf feature
 //?class or function
 //function
-class FeatureExtract
+class Feature
 {
+Mat ExtractFeature(sum, scale);
+Rect fst
 }
 
 //load model and detect
@@ -13,7 +15,13 @@ loadModel(filename);
 
 Seq<weak> weaks
 }
+class LogRegression
+{
+float Predict()
 
+Rect fst;
+Mat w;
+}weak;
 
 //Detection
 class SurfFaceDetection
