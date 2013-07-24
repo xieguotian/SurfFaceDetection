@@ -1,0 +1,13 @@
+This project is a impletementation of Surf cascade face detection of JanGuo Li.
+
+reference:
+	Li, Jianguo, Tao Wang, and Yimin Zhang. "Face detection using surf cascade." Computer Vision Workshops (ICCV Workshops), 2011 IEEE International Conference on. IEEE, 2011.
+	
+1. folder "include" contains all the header file
+2. folder "src" contains all the code implementation.
+3. folder "SurfFaceDectation" is the VS2010 project folder.
+
+note:
+	this is project is unfinished yet. the model training source code is not published yet.
+	
+author: Guotian Xie, Sun Yat-Sen University
