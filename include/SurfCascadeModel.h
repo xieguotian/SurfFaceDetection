@@ -7,35 +7,39 @@
 
 #include <vector>
 #include "DebugConfig.h"
-#include "opencv2\core\core.hpp
+#include "opencv2\core\core.hpp"
 
 #include "LogRegression.h"
+#include "Global.h"
 
 using namespace cv;
 using namespace std;
 
+class CascadeStage
+{
+public:
+	int Predict(Mat &_sumImg, float _scale, bool _sumRes = false);
+
+	bool LoadStage(FileNode *node);
+	bool LoadStage(FileStorage *file);
+
+protected:
+	vector<LogRegression> weak;
+	float threshold;
+};
 
 class SurfCascadeModel
 {
 public:	//API extern
 	bool LoadSurfCascadeModel(char *_fileName);
-	int JudgeWindow(Mat &sumImg, float sacle);
+	bool LoadSurfCascadeModel(FileStorage *_file);
+	int JudgeWindow(Mat &_sumImg, float _sacle);
 
 protected:
 	//API intern
 
 	//data
 	vector<CascadeStage>  Stages;
-};
-
-class CascadeStage
-{
-public:
-	int Predict(Mat &sumImg, float scale);
-
-protected:
-	vector<LogRegression> weak;
-	float threshold;
 };
 
 #endif

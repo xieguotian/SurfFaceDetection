@@ -9,17 +9,26 @@
 #include "DebugConfig.h"
 
 #include "Feature.h"
+#include "Global.h"
 
 using namespace cv;
 
 class LogRegression
 {
 public:
-	float Predict(const Mat &sumImg);
+	LogRegression();
+	LogRegression(Mat &_weight, SurfFeature &_feature);
+	LogRegression(Mat &_weight, Rect &_feature);
 
+	double Predict(const Mat &_sumImg, float _scale);
+	void SetWeight(Mat &_weight);
+	void SetFeature(SurfFeature &_feature);
+	void SetFeature(Rect &_feature);
+
+	bool LoadWeak(FileNode *node);
 protected:
 	Mat weight;
-	Feature feature;
+	SurfFeature feature;
 };
 
 #endif

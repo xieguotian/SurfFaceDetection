@@ -13,8 +13,11 @@ using namespace cv;
 class SurfFeature
 {
 public:
-	Mat FeatureEvaluate(Mat &_sumImg, float _scale);
-	void SetFeature(Rect &_feature);
+	SurfFeature();
+	SurfFeature(const Rect &_feature);
+
+	Mat FeatureEvaluate(const Mat &_sumImg, float _scale);
+	void SetFeature(const Rect &_feature);
 protected:
 	Rect feature;
 };

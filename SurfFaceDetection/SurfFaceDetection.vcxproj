@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\DebugConfig.h" />
     <ClInclude Include="..\include\Feature.h" />
+    <ClInclude Include="..\include\Global.h" />
     <ClInclude Include="..\include\LogRegression.h" />
     <ClInclude Include="..\include\SurfCascadeModel.h" />
     <ClInclude Include="..\include\SurfFaceDetection.h" />
