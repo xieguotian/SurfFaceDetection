@@ -49,14 +49,18 @@ double LogRegression::Predict(const Mat &_sum, float _scale)
 
 bool LogRegression::LoadWeak(FileNode *node)
 {
+	string str = (*node).name();
 	if(node == NULL || (*node).empty() ||
-		(*node)["Feature"].empty() || (*node)["LogressionWeight"].empty() )
+		(*node)["Feature"].empty() || (*node)["LogregressionWeight"].empty() )
 	{
 		CV_Error(CV_StsParseError, "Weak classifier format wrong in the model file");
 		return false;
 	}
 
-	(*node)["Feature"] >> feature;
+	
+	FileNode fstNode = (*node)["Feature"] ;
+	feature.LoadFeature(&fstNode);
+
 	Mat wei(FEATURE_SIZE, 1, CV_32FC1);
 	(*node)["LogregressionWeight"] >> wei;
 	weight = Mat_<double>(wei);

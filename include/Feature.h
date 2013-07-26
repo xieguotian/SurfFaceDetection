@@ -18,6 +18,7 @@ public:
 
 	Mat FeatureEvaluate(const Mat &_sumImg, float _scale);
 	void SetFeature(const Rect &_feature);
+	bool LoadFeature(FileNode *node);
 protected:
 	Rect feature;
 };

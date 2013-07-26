@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <opencv_storage>
-<Threshold>8.7258881330490112e-001</Threshold>
+<Threshold>4.4194195419549942e-002</Threshold>
 <TpRate>9.9500000476837158e-001</TpRate>
-<FpRate>7.7399998903274536e-002</FpRate>
-<NumWeaks>2</NumWeaks>
+<FpRate>2.1040000021457672e-001</FpRate>
+<NumWeaks>1</NumWeaks>
 <WeakSequence>
   <weak0>
     <FeatureIdx>163</FeatureIdx>
@@ -24,25 +24,5 @@
         -6.52888596e-001 2.31089668e+001 1.24556417e+001
         -5.28570271e+000 7.87506723e+000 1.17255878e+001
         -1.14171423e-001 2.16574001e+000 -6.65967882e-001
-        -1.68359146e+001 -1.99876175e+001</data></LogregressionWeight></weak0>
-  <weak1>
-    <FeatureIdx>212</FeatureIdx>
-    <Feature>
-      0 4 12 24</Feature>
-    <Alpha>1.</Alpha>
-    <LogregressionWeight type_id="opencv-matrix">
-      <rows>32</rows>
-      <cols>1</cols>
-      <dt>f</dt>
-      <data>
-        -3.83576918e+000 4.28151131e+000 1.94383836e+000 5.07672167e+000
-        3.42911339e+000 5.86008167e+000 -5.65668678e+000
-        -1.55527124e+001 -2.54920959e+000 7.54010296e+000
-        -1.82924385e+001 -5.38045692e+000 -7.72215009e-001
-        -1.63966846e+001 2.34395733e+001 1.59343882e+001 6.01120758e+000
-        -4.31707001e+000 6.56440449e+000 1.93377745e+000 5.20368481e+000
-        6.70953369e+000 -7.85607624e+000 -1.15791645e+001
-        4.73270321e+000 -1.07926631e+000 3.29104733e+000
-        -4.90062189e+000 -7.13489914e+000 7.22908211e+000
-        -4.77879286e+000 -4.03843880e+000</data></LogregressionWeight></weak1></WeakSequence>
+        -1.68359146e+001 -1.99876175e+001</data></LogregressionWeight></weak0></WeakSequence>
 </opencv_storage>

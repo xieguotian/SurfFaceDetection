@@ -2,6 +2,8 @@
 
 bool CascadeStage::LoadStage(FileNode *node)
 {
+	Clear();
+
 	if(node == NULL || (*node).empty() || (*node)["Threshold"].empty() 
 		|| (*node)["NumWeaks"].empty() || (*node)["WeakSequence"].empty())
 	{
@@ -18,7 +20,11 @@ bool CascadeStage::LoadStage(FileNode *node)
 	int idx = 0;
 	for(FileNodeIterator iter = weaksNode.begin(); iter != weaksNode.end(); iter++, idx++)
 	{
-		weak[idx].LoadWeak(&(*iter));
+		LogRegression ww;
+		if(!ww.LoadWeak(&(*iter)))
+			return false;
+
+		weak.push_back(ww);
 	}
 
 	return true;
@@ -32,7 +38,8 @@ bool CascadeStage::LoadStage(FileStorage *file)
 		return false;
 	}
 
-	FileNode firstNode  = (*file).getFirstTopLevelNode();
+	FileNode firstNode  = (*file).root();
+
 	if( firstNode.empty() )
 	{
 		CV_Error(CV_StsParseError, "Wrong format of model file.");
@@ -42,7 +49,7 @@ bool CascadeStage::LoadStage(FileStorage *file)
 	return LoadStage(&firstNode);
 }
 
-double CascadeStage::Predict(Mat &_sumImg, float _scale, bool _sumRes)
+double CascadeStage::Predict(const Mat &_sumImg, float _scale, bool _sumRes)
 {
 	double sum = 0.0;
 
@@ -67,6 +74,7 @@ bool SurfCascadeModel::LoadSurfCascadeModel(char *_fileName)
 
 bool SurfCascadeModel::LoadSurfCascadeModel(FileStorage *_file)
 {
+	Clear();
 	if( _file == NULL || !(*_file).isOpened() )
 		return false;
 
@@ -76,13 +84,48 @@ bool SurfCascadeModel::LoadSurfCascadeModel(FileStorage *_file)
 		CV_Error(CV_StsParseError, "Wrong format of model file.");
 		return false;
 	}
+
+	(*_file)["NumStages"] >> numStages;
+	stages.reserve(numStages);
+
+	FileNode weakSeq = (*_file)["WeakSequence"];
+	int idx = 0;
+	for(FileNodeIterator weak = weakSeq.begin(); weak != weakSeq.end(); weak++, idx++)
+	{
+		CascadeStage stage;
+
+		if(!stage.LoadStage(&(*weak)))
+		{
+			return false;
+		}
+		stages.push_back(stage);
+	}
+
+	return true;
+}
+
+bool SurfCascadeModel::LoadSurfCascadeModelByStages(vector<char *> _stageFiles)
+{
+	Clear();
+
+	for(int idx=0; idx<_stageFiles.size(); idx++)
+	{
+		FileStorage file(_stageFiles[idx], FileStorage::READ);
+		CascadeStage stage;
+		if(!stage.LoadStage(&file))
+			return false;
+
+		stages.push_back(stage);
+
+	}
+	return true;
 }
 
 int SurfCascadeModel::JudgeWindow(Mat &_sumImg, float _scale)
 {
-	for(int idx = 0; idx<Stages.size(); idx++)
+	for(int idx = 0; idx<stages.size(); idx++)
 	{
-		if( Stages[idx].Predict(_sumImg, _scale) == 0.0 )
+		if( stages[idx].Predict(_sumImg, _scale) == 0.0 )
 			return 0;
 	}
 	return 1;

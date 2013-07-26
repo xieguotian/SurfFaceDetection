@@ -18,12 +18,13 @@ using namespace std;
 class CascadeStage
 {
 public:
-	int Predict(Mat &_sumImg, float _scale, bool _sumRes = false);
+	double Predict(const Mat &_sumImg, float _scale, bool _sumRes = false);
 
 	bool LoadStage(FileNode *node);
 	bool LoadStage(FileStorage *file);
-
+	
 protected:
+	void Clear(){weak.clear();}
 	vector<LogRegression> weak;
 	float threshold;
 };
@@ -33,13 +34,15 @@ class SurfCascadeModel
 public:	//API extern
 	bool LoadSurfCascadeModel(char *_fileName);
 	bool LoadSurfCascadeModel(FileStorage *_file);
+	bool LoadSurfCascadeModelByStages(vector<char *> _stageFiles);
+
 	int JudgeWindow(Mat &_sumImg, float _sacle);
 
 protected:
 	//API intern
-
+	void Clear(){ stages.clear(); }
 	//data
-	vector<CascadeStage>  Stages;
+	vector<CascadeStage>  stages;
 };
 
 #endif

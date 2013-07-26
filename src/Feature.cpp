@@ -21,9 +21,9 @@ void SurfFeature::SetFeature(const Rect &_feature)
 
 Mat SurfFeature::FeatureEvaluate(const Mat &_sumImg, float _scale)
 {
-	CV_Assert( _scale < 1 );
+	CV_Assert( _scale > 1 );
 	CV_Assert( _sumImg.type() == CV_64FC(8) );
-	CV_Assert( feature == Rect() );
+	CV_Assert( feature != Rect() );
 
 	int x = (int)(feature.x * _scale + 0.5);
 	int y = (int)(feature.y * _scale + 0.5);
@@ -67,4 +67,25 @@ Mat SurfFeature::FeatureEvaluate(const Mat &_sumImg, float _scale)
 
 	CV_Assert(sumRes == 0);
 	result = result / cv::sqrt(sumRes);
+
+	return result;
+}
+
+bool SurfFeature::LoadFeature(FileNode *node)
+{
+	if( node == NULL || (*node).empty() )
+	{
+		CV_Error(CV_StsParseError, "Feature wrong format.");
+		return false;
+	}
+
+	vector<int> rect;
+	(*node) >> rect;
+
+	feature.x = rect[0];
+	feature.y = rect[1];
+	feature.width = rect[2];
+	feature.height = rect[3];
+	return true;
+
 }
