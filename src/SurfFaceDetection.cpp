@@ -37,26 +37,29 @@ void SurfFaceDetection::Init()
 		0.0, BORDER_REFLECT, BORDER_REFLECT);
 
 	sumCache = Mat(maxImgSize + Size(1,1), CV_64FC(8));
-
+	srcScale = 1.0;
+	//img.reserve(maxImgSize);
 }
 
 bool SurfFaceDetection::CalculateSurfSumImg(const Mat &_grayImg)
 {
 	CV_Assert(_grayImg.type() == CV_8U && !_grayImg.empty());
-
+	imgOrg = _grayImg;
 	Mat img;
 	if(_grayImg.size().width > maxImgSize.width || _grayImg.size().height > maxImgSize.height)
 	{
 		double scale = cv::min( (double)maxImgSize.height / _grayImg.size().height, (double)maxImgSize.width / _grayImg.size().width);
-
+		srcScale = scale;
 		Size reSize((int)(_grayImg.size().width * scale + 0.5), (int)(_grayImg.size().height * scale + 0.5));
 		resize(_grayImg, img, reSize);
 	}else
 	{
 		img = _grayImg;
+		srcScale = 1.0;
 	}
 
-	Size imgSize = img.size();
+	imgSize = img.size();
+
 	cv::Mat rowImg(img.size(), CV_16SC1);
 	cv::Mat colImg(img.size(), CV_16SC1);
 
@@ -66,7 +69,8 @@ bool SurfFaceDetection::CalculateSurfSumImg(const Mat &_grayImg)
 	std::vector<cv::Mat> splitImg(8);
 
 	cv::Mat mergeImg(img.size(), CV_32SC(8));
-	Mat sumImg(img.size() + Size(1,1), CV_64FC(8), sumCache.ptr(0,0));
+	//Mat sumImg(img.size() + Size(1,1), CV_64FC(8), sumCache.ptr(0,0));
+	Mat sumImg(sumCache,Rect(0,0,imgSize.width+1, imgSize.height+1));
 
 	cv::Mat dyM = cv::Mat_<short>((colImg < 0) / 255);
 	cv::Mat dxM = cv::Mat_<short>((rowImg < 0) / 255);
@@ -84,60 +88,103 @@ bool SurfFaceDetection::CalculateSurfSumImg(const Mat &_grayImg)
 	cv::merge(splitImg, mergeImg);
 	mergeImg = cv::Mat_<cv::Vec<float,8>>(mergeImg);
 
+	
 	cv::integral(mergeImg, sumImg);
-
+	
 	return true;
 }
 
-bool SurfFaceDetection::DetectMultiScale(const Mat &_grayImg, float _scaleFactor, int _stepFactor, Size _winSize, vector<Rect> &_faceList)
+bool SurfFaceDetection::DetectMultiScale(const Mat &_grayImg, float _scaleFactor, 
+	float _stepFactor, Size _winSize, vector<Rect> &_faceList, bool _isScore, vector<double> *_scoreList)
 {
 	if(!CalculateSurfSumImg(_grayImg))
 		return false;
 
 	Size actualSize(_winSize);
-	Size imgSize = _grayImg.size();
+	//Size imgSize = _grayImg.size();
+
+	float scale = 1.0;
+	int step = cv::min((int)(actualSize.height * _stepFactor + 0.5),
+		(int)(actualSize.width * _stepFactor + 0.5));
 
 	while( actualSize.width <= imgSize.width && actualSize.height <= imgSize.height )
 	{
-		DetectSingleScale(actualSize, _scaleFactor, _stepFactor, _faceList);
-		int height = (int)(_scaleFactor * actualSize.height + 0.5);
-		int width = (int)(_scaleFactor * actualSize.width + 0.5);
+		DetectSingleScale(actualSize, scale, step, _faceList,_scoreList);
+
+		scale = scale * _scaleFactor;
+
+		int height = (int)(scale * _winSize.height + 0.5);
+		int width = (int)(scale * _winSize.width + 0.5);
 		actualSize = Size(width, height);
+
+		step = cv::min((int)(actualSize.height * _stepFactor + 0.5),
+		(int)(actualSize.width * _stepFactor + 0.5));
 	}
 
-	groupRectangles(_faceList,3);
+	groupRectangles(_faceList,2);
+	if( srcScale != 1.0 )
+	{
+		for(int idx=0; idx<_faceList.size(); idx++)
+		{
+			_faceList[idx].x = (int)(_faceList[idx].x * srcScale + 0.5);
+			_faceList[idx].y = (int)(_faceList[idx].y * srcScale + 0.5);
+			_faceList[idx].width = (int)(_faceList[idx].width * srcScale + 0.5);
+			_faceList[idx].height = (int)(_faceList[idx].height * srcScale + 0.5);
+		}
+	}
 	return true;
 }
 
-bool SurfFaceDetection::DetectSingleScale(const Mat &_grayImg, float _scaleFactor, int _stepFactor, Size _winSize, vector<Rect> &_faceList)
+bool SurfFaceDetection::DetectSingleScale(const Mat &_grayImg, float _scale,
+	float _stepFactor, Size _winSize, vector<Rect> &_faceList)
 {
 	if(!CalculateSurfSumImg(_grayImg))
 		return false;
 
-	int height = (int)(_scaleFactor * _winSize.height + 0.5);
-	int width = (int)(_scaleFactor * _winSize.width + 0.5);
+	int height = (int)(_scale * _winSize.height + 0.5);
+	int width = (int)(_scale * _winSize.width + 0.5);
 
 	Size actualSize(width,height);
-	DetectSingleScale(actualSize, _scaleFactor, _stepFactor, _faceList);
-	groupRectangles(_faceList, 3);
+	int step = cv::min((int)(actualSize.height * _stepFactor + 0.5),
+		(int)(actualSize.width * _stepFactor + 0.5));
+	DetectSingleScale(actualSize, _scale, step, _faceList);
+	groupRectangles(_faceList, 2);
 
 	return true;
 }
 
-bool SurfFaceDetection::DetectSingleScale(Size _winSize, float _scaleFactor, int _stepFactor, vector<Rect> &_faceList)
+bool SurfFaceDetection::DetectSingleScale(Size _winSize, float _scaleFactor, 
+	int _step, vector<Rect> &_faceList, vector<double> *_scoreList)
 {
 	Size sumWinSize = _winSize + Size(1,1);
-	for(int offsetY = 0; offsetY + _stepFactor < _winSize.height; offsetY += _stepFactor)
+	double score = 0.0;
+	for(int offsetY = 0; offsetY + _winSize.height <= imgSize.height; offsetY += _step)
 	{
-		for(int offsetX = 0; offsetX + _stepFactor < _winSize.width; offsetX += _stepFactor)
+		for(int offsetX = 0; offsetX + _winSize.width <= imgSize.width; offsetX += _step)
 		{
-			Mat sum(sumWinSize, sumCache.type(), sumCache.ptr(offsetY, offsetX));
-			if( model.JudgeWindow(sum, _scaleFactor) == 1 )
+			Rect roi = Rect(offsetX,offsetY,sumWinSize.width,sumWinSize.height);
+			Mat sum(sumCache,roi);
+
+			bool flag = false;
+			if( model.JudgeWindow(sum, _scaleFactor, score) == 1 )
 			{
+				flag = true;
+				if(_scoreList!=NULL)
+					_scoreList->push_back(score);
 				Rect rect(offsetX, offsetY, _winSize.width, _winSize.height);
 				_faceList.push_back(rect);
 			}
-			
+#undef MY_DEBUG
+#ifdef MY_DEBUG
+			Mat tmp;
+			cvtColor(imgOrg,tmp,CV_GRAY2RGB);
+			if(!flag)
+				rectangle(tmp,roi,Scalar(0,255,0));
+			else
+				rectangle(tmp,roi,Scalar(255,0,0));
+			imshow("tmpShow",tmp);
+			waitKey(_step*2);
+#endif
 		}
 	}
 	return true;

@@ -21,16 +21,16 @@ void SurfFeature::SetFeature(const Rect &_feature)
 
 Mat SurfFeature::FeatureEvaluate(const Mat &_sumImg, float _scale)
 {
-	CV_Assert( _scale > 1 );
+	CV_Assert( _scale >= 1 );
 	CV_Assert( _sumImg.type() == CV_64FC(8) );
 	CV_Assert( feature != Rect() );
 
-	int x = (int)(feature.x * _scale + 0.5);
-	int y = (int)(feature.y * _scale + 0.5);
-	int width = (int)(feature.width * _scale + 0.5);
-	int height = (int)(feature.width * _scale + 0.5);
+	int tx = ((int)((feature.x + 1) * _scale + 0.5) - 1);
+	int ty = ((int)((feature.y + 1) * _scale + 0.5) - 1);
+	int bx = (int)(feature.br().x * _scale + 0.5);
+	int by = (int)(feature.br().y * _scale + 0.5);
 
-	Rect scaleFst(x,y,width,height);
+	Rect scaleFst(Point(tx,ty),Point(bx,by));
 	if( scaleFst.br().x >= _sumImg.rows || scaleFst.br().y >= _sumImg.cols )
 		CV_Error(CV_StsOutOfRange,"Scale feature size is larger than given window size!");
 
@@ -65,7 +65,7 @@ Mat SurfFeature::FeatureEvaluate(const Mat &_sumImg, float _scale)
 		}
 	}
 
-	CV_Assert(sumRes == 0);
+	CV_Assert(sumRes != 0);
 	result = result / cv::sqrt(sumRes);
 
 	return result;

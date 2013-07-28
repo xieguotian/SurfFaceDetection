@@ -49,19 +49,20 @@ bool CascadeStage::LoadStage(FileStorage *file)
 	return LoadStage(&firstNode);
 }
 
-double CascadeStage::Predict(const Mat &_sumImg, float _scale, bool _sumRes)
+double CascadeStage::Predict(const Mat &_sumImg, float _scale, double &_score)
 {
-	double sum = 0.0;
+	//double sum = 0.0;
+	_score = 0.0;
 
 	for(int idx=0; idx<weak.size(); idx++)
 	{
-		sum += weak[idx].Predict(_sumImg, _scale);
+		_score += weak[idx].Predict(_sumImg, _scale);
 	}
 
-	if(!_sumRes)
-		sum = (sum<threshold? 0:1);
+	//if(!_sumRes)
+		//sum = (sum<threshold? 0:1);
 
-	return sum;
+	return (_score < threshold)? 0:1;
 }
 
 bool SurfCascadeModel::LoadSurfCascadeModel(char *_fileName)
@@ -121,11 +122,12 @@ bool SurfCascadeModel::LoadSurfCascadeModelByStages(vector<char *> _stageFiles)
 	return true;
 }
 
-int SurfCascadeModel::JudgeWindow(Mat &_sumImg, float _scale)
+int SurfCascadeModel::JudgeWindow(Mat &_sumImg, float _scale, double &_score)
 {
+	_score = 0;
 	for(int idx = 0; idx<stages.size(); idx++)
 	{
-		if( stages[idx].Predict(_sumImg, _scale) == 0.0 )
+		if( stages[idx].Predict(_sumImg, _scale, _score) == 0.0 )
 			return 0;
 	}
 	return 1;

@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SurfFaceDetection", "SurfFaceDetection.vcxproj", "{EF315027-E32A-4822-83E2-A573B40F871D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FDDB", "..\testTool\FDDB\FDDB.vcxproj", "{139D1AF7-0FBC-4C8E-8350-6455E70BB127}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,14 @@ Global
 		{EF315027-E32A-4822-83E2-A573B40F871D}.Release|Win32.Build.0 = Release|Win32
 		{EF315027-E32A-4822-83E2-A573B40F871D}.Release|x64.ActiveCfg = Release|x64
 		{EF315027-E32A-4822-83E2-A573B40F871D}.Release|x64.Build.0 = Release|x64
+		{139D1AF7-0FBC-4C8E-8350-6455E70BB127}.Debug|Win32.ActiveCfg = Debug|Win32
+		{139D1AF7-0FBC-4C8E-8350-6455E70BB127}.Debug|Win32.Build.0 = Debug|Win32
+		{139D1AF7-0FBC-4C8E-8350-6455E70BB127}.Debug|x64.ActiveCfg = Debug|x64
+		{139D1AF7-0FBC-4C8E-8350-6455E70BB127}.Debug|x64.Build.0 = Debug|x64
+		{139D1AF7-0FBC-4C8E-8350-6455E70BB127}.Release|Win32.ActiveCfg = Release|Win32
+		{139D1AF7-0FBC-4C8E-8350-6455E70BB127}.Release|Win32.Build.0 = Release|Win32
+		{139D1AF7-0FBC-4C8E-8350-6455E70BB127}.Release|x64.ActiveCfg = Release|x64
+		{139D1AF7-0FBC-4C8E-8350-6455E70BB127}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

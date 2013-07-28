@@ -18,10 +18,51 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="evaluation\common.hpp" />
+    <ClInclude Include="evaluation\EllipseR.hpp" />
+    <ClInclude Include="evaluation\EllipsesSingleImage.hpp" />
+    <ClInclude Include="evaluation\Hungarian.hpp" />
+    <ClInclude Include="evaluation\Matching.hpp" />
+    <ClInclude Include="evaluation\MatchPair.hpp" />
+    <ClInclude Include="evaluation\OpenCVUtils.hpp" />
+    <ClInclude Include="evaluation\RectangleR.hpp" />
+    <ClInclude Include="evaluation\RectanglesSingleImage.hpp" />
+    <ClInclude Include="evaluation\Region.hpp" />
+    <ClInclude Include="evaluation\RegionsSingleImage.hpp" />
+    <ClInclude Include="evaluation\Results.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="evaluation\EllipseR.cpp" />
+    <ClCompile Include="evaluation\EllipsesSingleImage.cpp" />
+    <ClCompile Include="evaluation\evaluate.cpp" />
+    <ClCompile Include="evaluation\Hungarian.cpp" />
+    <ClCompile Include="evaluation\Matching.cpp" />
+    <ClCompile Include="evaluation\MatchPair.cpp" />
+    <ClCompile Include="evaluation\OpenCVUtils.cpp" />
+    <ClCompile Include="evaluation\RectangleR.cpp" />
+    <ClCompile Include="evaluation\RectanglesSingleImage.cpp" />
+    <ClCompile Include="evaluation\Region.cpp" />
+    <ClCompile Include="evaluation\RegionsSingleImage.cpp" />
+    <ClCompile Include="evaluation\Results.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="evaluation\Makefile" />
+    <None Include="evaluation\README.txt" />
+    <None Include="evaluation\runEvaluate.pl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{EF315027-E32A-4822-83E2-A573B40F871D}</ProjectGuid>
+    <ProjectGuid>{139D1AF7-0FBC-4C8E-8350-6455E70BB127}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>SurfFaceDetection</RootNamespace>
+    <RootNamespace>FDDB</RootNamespace>
+    <SccProjectName>
+    </SccProjectName>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -64,15 +105,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(OPENCV)include;$(OPENCV)include\opencv;$(OPENCV)include\opencv2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(OPENCV)include;$(OPENCV)include\opencv;$(OPENCV)include\opencv2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(OPENCV)include;$(OPENCV)include\opencv;$(OPENCV)include\opencv2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(OPENCV)include;$(OPENCV)include\opencv;$(OPENCV)include\opencv2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -81,13 +126,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(OPENCV)include;$(SolutionDir)..\include;$(MATLAB)extern\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OPENCV)inlcude;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(OPENCV)x86\vc10\lib;$(MATLAB)\extern\lib\win32\microsoft;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_core245d.lib;opencv_imgproc245d.lib;opencv_highgui245d.lib;opencv_objdetect245d.lib;%(AdditionalDependencies);libeng.lib;libmx.lib;libut.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OPENCV)x86\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_core245d.lib;opencv_highgui245d.lib;opencv_imgproc245d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -97,13 +142,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(OPENCV)include;$(SolutionDir)..\include;$(MATLAB)extern\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OPENCV)inlcude;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(OPENCV)x64\vc10\lib;$(MATLAB)extern\lib\win64\microsoft;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_core245d.lib;opencv_imgproc245d.lib;opencv_highgui245d.lib;opencv_objdetect245d.lib;%(AdditionalDependencies);libeng.lib;libmx.lib;libut.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OPENCV)x64\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_core245d.lib;opencv_highgui245d.lib;opencv_imgproc245d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -115,15 +160,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(OPENCV)include;$(SolutionDir)..\include;$(MATLAB)extern\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OPENCV)inlcude;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(OPENCV)x86\vc10\lib;$(MATLAB)\extern\lib\win32\microsoft;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_core245.lib;opencv_imgproc245.lib;opencv_highgui245.lib;opencv_objdetect245.lib;%(AdditionalDependencies);libeng.lib;libmx.lib;libut.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OPENCV)x86\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_core245.lib;opencv_highgui245.lib;opencv_imgproc245.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -135,33 +180,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(OPENCV)include;$(SolutionDir)..\include;$(MATLAB)extern\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OPENCV)inlcude;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(OPENCV)x64\vc10\lib;$(MATLAB)extern\lib\win64\microsoft;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_core245.lib;opencv_imgproc245.lib;opencv_highgui245.lib;opencv_objdetect245.lib;%(AdditionalDependencies);libeng.lib;libmx.lib;libut.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OPENCV)x64\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_core245.lib;opencv_highgui245.lib;opencv_imgproc245.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\include\DebugConfig.h" />
-    <ClInclude Include="..\include\Feature.h" />
-    <ClInclude Include="..\include\Global.h" />
-    <ClInclude Include="..\include\LogRegression.h" />
-    <ClInclude Include="..\include\SurfCascadeModel.h" />
-    <ClInclude Include="..\include\SurfFaceDetection.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\src\DebugConfig.cpp" />
-    <ClCompile Include="..\src\Feature.cpp" />
-    <ClCompile Include="..\src\LogRegression.cpp" />
-    <ClCompile Include="..\src\SurfCascadeModel.cpp" />
-    <ClCompile Include="..\src\SurfFaceDetection.cpp" />
-    <ClCompile Include="..\src\SurfFaceDetMain.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

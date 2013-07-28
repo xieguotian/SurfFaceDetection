@@ -6,6 +6,14 @@ reference:
 1. folder "include" contains all the header file
 2. folder "src" contains all the code implementation.
 3. folder "SurfFaceDectation" is the VS2010 project folder.
+4. folder “testTool" is FDDB roc test code.
+	ref:	Vidit Jain and Erik Learned-Miller.
+				FDDB: A Benchmark for Face Detection in Unconstrained Settings.
+				Technical Report UM-CS-2010-009, Dept. of Computer Science, University of Massachusetts, Amherst. 2010. 
+	site:	http://vis-www.cs.umass.edu/fddb/
+	
+5. folder "model" contains model files
+6. folder "data" contains some data for test and test result of FDDB roc.
 
 note:
 	this is project is unfinished yet. the model training source code is not published yet.

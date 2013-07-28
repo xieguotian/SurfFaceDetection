@@ -18,7 +18,7 @@ using namespace std;
 class CascadeStage
 {
 public:
-	double Predict(const Mat &_sumImg, float _scale, bool _sumRes = false);
+	double Predict(const Mat &_sumImg, float _scale, double &_score);
 
 	bool LoadStage(FileNode *node);
 	bool LoadStage(FileStorage *file);
@@ -36,7 +36,7 @@ public:	//API extern
 	bool LoadSurfCascadeModel(FileStorage *_file);
 	bool LoadSurfCascadeModelByStages(vector<char *> _stageFiles);
 
-	int JudgeWindow(Mat &_sumImg, float _sacle);
+	int JudgeWindow(Mat &_sumImg, float _sacle, double &_score);
 
 protected:
 	//API intern
