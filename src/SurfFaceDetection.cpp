@@ -120,8 +120,9 @@ bool SurfFaceDetection::DetectMultiScale(const Mat &_grayImg, float _scaleFactor
 		step = cv::min((int)(actualSize.height * _stepFactor + 0.5),
 		(int)(actualSize.width * _stepFactor + 0.5));
 	}
-
-	groupRectangles(_faceList,2);
+	vector<int> weights(_faceList.size(),2);
+	//groupRectangles(_faceList,1,0.2,&weights,_scoreList);
+	groupRectangles(_faceList,weights, *_scoreList,1);
 	if( srcScale != 1.0 )
 	{
 		for(int idx=0; idx<_faceList.size(); idx++)
@@ -157,11 +158,12 @@ bool SurfFaceDetection::DetectSingleScale(Size _winSize, float _scaleFactor,
 	int _step, vector<Rect> &_faceList, vector<double> *_scoreList)
 {
 	Size sumWinSize = _winSize + Size(1,1);
-	double score = 0.0;
+	
 	for(int offsetY = 0; offsetY + _winSize.height <= imgSize.height; offsetY += _step)
 	{
 		for(int offsetX = 0; offsetX + _winSize.width <= imgSize.width; offsetX += _step)
 		{
+			double score = 0.0;
 			Rect roi = Rect(offsetX,offsetY,sumWinSize.width,sumWinSize.height);
 			Mat sum(sumCache,roi);
 

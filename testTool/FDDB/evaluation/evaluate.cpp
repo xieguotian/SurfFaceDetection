@@ -75,7 +75,7 @@ int main(int argc, char *argv[]){
 	//string baseDir = "F:/scratch/Data/facesInTheWild/";
 	string baseDir = "D:\\microsoft\\MyProject\\FaceDectorPerfTest\\DataSet\\";
 	const char* listFile = "D:\\microsoft\\MyProject\\FaceDectorPerfTest\\DataSet\\myfolds\\all.txt";
-	const char* detFile = "../../data/detResOnFDDB.txt";
+	const char* detFile = "../../data/detResOnFDDB-1.2.txt";
 	const char* annotFile = "D:\\microsoft\\MyProject\\FaceDectorPerfTest\\DataSet\\myfolds\\all_ellipse.txt";
 	char* list = new char[_MAX_PATH];
 	char* det = new char[_MAX_PATH];
@@ -147,11 +147,11 @@ int Evaluate(string baseDir,string listFile,string detFile,string annotFile)
 	// directory containing the images
 	string imDir = baseDir;
 	// prefix used for writing the ROC-curve files
-	string rocFilePrefix = ""; 
+	string rocFilePrefix = "../../data/"; 
 	{
 		char* name = new char[_MAX_PATH];
 		_splitpath(detFile.c_str(),NULL,NULL,name,NULL);
-		rocFilePrefix = name;
+		rocFilePrefix = rocFilePrefix + name;
 	}
 	// format used for specifying the detected regions
 	int detFormat = DET_RECTANGLE;
@@ -306,7 +306,7 @@ int Evaluate(string baseDir,string listFile,string detFile,string annotFile)
 						for(unsigned int i=0; i< mps->size(); i++)
 						{
 							stringstream ss("");
-							ss << i;
+							ss << i ;
 							const char *textDetInd = ss.str().c_str();
 							mask = ( (EllipseR *)(mps->at(i)->r1) )->display(mask, CV_RGB(255,0,0), 3, textDetInd);
 							switch(detFormat)

@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 
 	SurfFaceDetection detection(stageFiles);
 
-///#define VEDIO_TEST
+//#define VEDIO_TEST
 #ifdef VEDIO_TEST	
 	VideoCapture cap(0);
 	if(!cap.isOpened())
@@ -50,14 +50,14 @@ int main(int argc, char* argv[])
 		cap >> frame;
 		clock_t t1 = clock();
 		cvtColor(frame, grayImg, CV_RGB2GRAY);
-		detection.DetectMultiScale(grayImg,1.2,0.2,Size(40,40),myFace);
+		detection.DetectMultiScale(grayImg,1.1,0.1,Size(40,40),myFace);
 		for(int idx=0; idx<myFace.size(); idx++)
 			rectangle(frame,myFace[idx],Scalar(0,255,0));
 
 		clock_t t2 = clock();
 		cout<<(t2-t1)/1000.0 << "\r";
 		imshow("video",frame);
-		waitKey(1);
+		waitKey(10);
 	}
 
 #endif
@@ -89,12 +89,12 @@ int main(int argc, char* argv[])
 		return -1;
 	string line;
 
-#define TEXT
+#define SHOW
 #ifdef SHOW
 	namedWindow("FDDB",1);
 #endif
 #ifdef TEXT
-	ofstream detRes("../data/detResOnFDDB.txt");
+	ofstream detRes("../data/detResOnFDDB-1.2.txt");
 	if( !detRes.is_open() )
 		return -1;
 	int count = 0;
@@ -111,18 +111,19 @@ int main(int argc, char* argv[])
 
 
 #ifdef SHOW
-		detection.DetectMultiScale(img,1.1,0.1,Size(40,40),faces);
+		vector<double> scores;
+		detection.DetectMultiScale(img,1.2,0.1,Size(40,40),faces,true, &scores);
 		for(int idx=0; idx<faces.size(); idx++)
 			rectangle(colorImg,faces[idx],Scalar(0,255,0));
 		imshow("FDDB",colorImg);
-		waitKey(100);
+		waitKey(500);
 #endif
 #ifdef TEXT
 		count ++;
 		
 		vector<double> scores;
 		clock_t t1 = clock();
-		detection.DetectMultiScale(img,1.1,0.1,Size(40,40),faces,true,&scores);
+		detection.DetectMultiScale(img,1.2,0.1,Size(40,40),faces,true,&scores);
 		clock_t t2 = clock();
 		double tt = (t2 - t1)/1000.0;
 		cout << "iter: " << count << "\t" << tt << "\r";
@@ -132,11 +133,11 @@ int main(int argc, char* argv[])
 		for(int idx=0; idx<faces.size(); idx++)
 		{
 			//faces[idx].x = (int)std::max<double>(0,faces[idx].x - 0.25 * faces[idx].width);
-			faces[idx].y = (int)std::max<double>(0,faces[idx].y - 0.5 * faces[idx].height);
-			faces[idx].height = std::min((int)(faces[idx].height * 1.7),img.rows - faces[idx].y);
+			faces[idx].y = (int)std::max<double>(0,faces[idx].y - 0.3 * faces[idx].height);
+			faces[idx].height = std::min((int)(faces[idx].height * 1.5),img.rows - faces[idx].y);
 
-			faces[idx].x = (int)std::max<double>(0,faces[idx].x - 0.25 * faces[idx].width);
-			faces[idx].width = std::min((int)(faces[idx].width*1.5),img.cols - faces[idx].x);
+			//faces[idx].x = (int)std::max<double>(0,faces[idx].x - 0.15 * faces[idx].width);
+			//faces[idx].width = std::min((int)(faces[idx].width*1.3),img.cols - faces[idx].x);
 			detRes << faces[idx].x << " " << faces[idx].y << " " <<
 				faces[idx].width << " " << faces[idx].height 
 				<< " " << scores[idx] << endl;
